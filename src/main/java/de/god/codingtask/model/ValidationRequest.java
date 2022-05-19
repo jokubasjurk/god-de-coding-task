@@ -26,6 +26,7 @@ public class ValidationRequest implements Serializable {
 
     private String department;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ValidationRequestStatus status;
 
 }

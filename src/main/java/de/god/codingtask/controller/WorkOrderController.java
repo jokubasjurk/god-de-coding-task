@@ -1,6 +1,7 @@
 package de.god.codingtask.controller;
 
 import de.god.codingtask.model.ValidationRequest;
+import de.god.codingtask.model.ValidationRequestStatus;
 import de.god.codingtask.model.WorkOrderValidationError;
 import de.god.codingtask.payload.WorkOrderDTO;
 import de.god.codingtask.repository.ValidationRequestRepository;
@@ -20,9 +21,6 @@ public class WorkOrderController {
     @Autowired
     ValidationRequestRepository validationRequestRepository;
 
-    @Autowired
-    private HttpServletRequest request;
-
     @PostMapping("/validate")
     @ResponseBody
     public ResponseEntity<List<String>> validateWorkOrder(@RequestBody @Valid WorkOrderDTO workOrderDTO) {
@@ -30,7 +28,7 @@ public class WorkOrderController {
             List<String> validationErrors = WorkOrderValidationError.getValidationErrors(workOrderDTO);
             ValidationRequest validationRequest = ValidationRequest.builder()
                     .department(workOrderDTO.getDepartment())
-                    .status(validationErrors.isEmpty() ? "Valid" : "Invalid")
+                    .status(validationErrors.isEmpty() ? ValidationRequestStatus.VALID : ValidationRequestStatus.INVALID)
                     .type(workOrderDTO.getType())
                     .timestamp(LocalDateTime.now())
                     .build();
