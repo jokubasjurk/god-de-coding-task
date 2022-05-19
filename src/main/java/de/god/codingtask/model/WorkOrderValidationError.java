@@ -109,7 +109,7 @@ public enum WorkOrderValidationError {
         return Arrays.stream(WorkOrderValidationError.values())
                 .filter(error -> error.workOrderType == WorkOrderType.DEFAULT || error.workOrderType == workOrderDTO.getType())
                 .filter(error -> error.byApplicableWorkOrderRule().test(workOrderDTO))
-                .map(workOrderValidationError -> workOrderValidationError.toString())
+                .map(workOrderValidationError -> String.format("%s: %s", workOrderValidationError.name(), workOrderValidationError))
                 .collect(Collectors.toList());
     }
 
