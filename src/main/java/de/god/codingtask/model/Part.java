@@ -1,5 +1,6 @@
-package lt.jokubas.codingtask.model;
+package de.god.codingtask.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ public class Part implements Serializable {
 
     }
 
+    @JsonProperty("inventory_number")
     private String inventoryNumber;
     private String name;
     private long count;

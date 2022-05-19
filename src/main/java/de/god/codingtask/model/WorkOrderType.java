@@ -1,7 +1,8 @@
-package lt.jokubas.codingtask.model;
+package de.god.codingtask.model;
 
 public enum WorkOrderType {
     REPAIR,
     REPLACEMENT,
-    ANALYSIS
+    ANALYSIS,
+    DEFAULT
 }

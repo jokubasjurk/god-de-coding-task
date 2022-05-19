@@ -1,7 +1,7 @@
 package de.god.codingtask.repository;
 
-import de.god.codingtask.model.WorkOrder;
+import de.god.codingtask.model.ValidationRequest;
 import org.springframework.data.repository.CrudRepository;
 
-public interface WorkOrderRepository extends CrudRepository<WorkOrder, Long> {
+public interface ValidationRequestRepository extends CrudRepository<ValidationRequest, Long> {
 }

@@ -1,42 +1,49 @@
-package lt.jokubas.codingtask.controller;
+package de.god.codingtask.controller;
 
-import lt.jokubas.codingtask.model.WorkOrder;
-import lt.jokubas.codingtask.payload.WorkOrderDTO;
-import lt.jokubas.codingtask.service.workorder.factory.WorkOrderValidatorFactory;
-import lt.jokubas.codingtask.service.workorder.validator.WorkOrderValidator;
-import lt.jokubas.codingtask.repository.WorkOrderRepository;
+import de.god.codingtask.model.ValidationRequest;
+import de.god.codingtask.model.WorkOrderValidationError;
+import de.god.codingtask.payload.WorkOrderDTO;
+import de.god.codingtask.repository.ValidationRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:8081")
 @RestController
-@RequestMapping("/api/work-orders")
 public class WorkOrderController {
 
     @Autowired
-    WorkOrderRepository workOrderRepository;
+    ValidationRequestRepository validationRequestRepository;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @PostMapping("/validate")
-    public ResponseEntity<WorkOrder> validateWorkOrder(@RequestBody @Valid WorkOrderDTO workOrderDTO) {
+    @ResponseBody
+    public ResponseEntity<List<String>> validateWorkOrder(@RequestBody @Valid WorkOrderDTO workOrderDTO) {
         try {
-            WorkOrderValidator workOrderValidator = getValidator(workOrderDTO);
-            workOrderValidator.validate(workOrderDTO);
-            return new ResponseEntity<>(null, HttpStatus.CREATED);
+            List<String> validationErrors = WorkOrderValidationError.getValidationErrors(workOrderDTO);
+            ValidationRequest validationRequest = ValidationRequest.builder()
+                    .department(workOrderDTO.getDepartment())
+                    .status(validationErrors.isEmpty() ? "Valid" : "Invalid")
+                    .type(workOrderDTO.getType())
+                    .timestamp(LocalDateTime.now())
+                    .build();
+            validationRequestRepository.save(validationRequest);
+            return new ResponseEntity<>(validationErrors, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private WorkOrderValidator getValidator(WorkOrderDTO workOrderDTO) {
-        WorkOrderValidatorFactory workOrderValidatorFactory = new WorkOrderValidatorFactory();
-        return workOrderValidatorFactory.createWorkOrderValidator(workOrderDTO.getType());
+    @GetMapping("/")
+    public String test() {
+        return "<h1>Application is running</h1>";
     }
 
 }

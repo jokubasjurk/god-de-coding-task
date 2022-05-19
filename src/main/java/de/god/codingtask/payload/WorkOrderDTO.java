@@ -1,15 +1,14 @@
-package lt.jokubas.codingtask.payload;
+package de.god.codingtask.payload;
 
-import lt.jokubas.codingtask.model.Part;
-import lt.jokubas.codingtask.model.WorkOrderType;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.god.codingtask.model.Part;
+import de.god.codingtask.model.WorkOrderType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,35 +16,37 @@ import java.util.List;
 @Getter
 @Setter
 public class WorkOrderDTO {
-    @NotBlank
     private String department;
 
-    @NotBlank
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonProperty("start_date")
     private LocalDate startDate;
 
-    @NotBlank
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonProperty("end_date")
     private LocalDate endDate;
 
     private String currency;
 
-    @Positive
     private BigDecimal cost;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
     private WorkOrderType type;
 
+    @JsonProperty("analysis_date")
     private LocalDate analysisDate;
 
+    @JsonProperty("responsible_person")
     private String responsiblePerson;
 
+    @JsonProperty("test_date")
     private LocalDate testDate;
 
     private List<Part> parts;
 
+    @JsonProperty("factory_name")
     private String factoryName;
 
+    @JsonProperty("factory_order_number")
     private String factoryOrderNumber;
 }

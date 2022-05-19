@@ -1,4 +1,4 @@
-package lt.jokubas.codingtask.model;
+package de.god.codingtask.model;
 
 import lombok.Getter;
 import lombok.Setter;

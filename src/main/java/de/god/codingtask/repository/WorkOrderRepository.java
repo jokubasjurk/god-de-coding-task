@@ -1,10 +1,7 @@
-package lt.jokubas.codingtask.repository;
+package de.god.codingtask.repository;
 
-import java.util.List;
+import de.god.codingtask.model.WorkOrder;
+import org.springframework.data.repository.CrudRepository;
 
-import lt.jokubas.codingtask.model.WorkOrder;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long> {
-  List<WorkOrder> findByDepartment(boolean published);
+public interface WorkOrderRepository extends CrudRepository<WorkOrder, Long> {
 }
